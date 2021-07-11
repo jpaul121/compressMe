@@ -2,7 +2,7 @@ import Header from './components/Header'
 import HeroSection from './components/HeroSection'
 import React from 'react'
 import UploadSection from './components/UploadSection'
-import background from './background_img.jpg'
+import background from './assets/background_img.jpg'
 
 function App() {
     return (

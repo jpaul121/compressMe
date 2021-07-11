@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "declaration": true,
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["./main.d.ts"]
   }
 }
