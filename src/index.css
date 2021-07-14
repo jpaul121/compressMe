@@ -6,4 +6,8 @@
   .flex-grow-2 {
     flex-grow: 2;
   }
+
+  .max-w-2xs {
+    max-width: 200px;
+  }
 }

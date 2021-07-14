@@ -1,9 +1,10 @@
-interface CompressedImage extends Blob {
+interface ImageFile extends Blob {
   name: string;
+  objectURL: string;
 }
 
-interface CompressedImages {
-  [ fileName: string ]: CompressedImage;
+interface ImageFiles {
+  [ fileName: string ]: ImageFile;
 }
 
 interface HTMLInputEvent extends Event {
