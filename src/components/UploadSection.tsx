@@ -45,7 +45,7 @@ function UploadSection() {
        [ item.name ]: item,
       })
     })
-    console.log('mounting', uploadButtonRefObject.current);
+    
     return () => {
       // Revoke objectURLs on dismount to avoid memory leaks
       if (
@@ -54,19 +54,18 @@ function UploadSection() {
       ) Object.keys(imageFiles).map(index => {
         const item = imageFiles[index]
         URL.revokeObjectURL(item.objectURL)
-        console.log('mounting', uploadButtonRefObject.current);
       })
     }
   }, [ imageFiles ])
   
   return (
     <div className='flex flex-col items-center h-7/12 w-6/12 bg-white rounded-md z-10'>
+      <input type='file' id='upload-button' ref={uploadButtonRef} hidden />
       {
         (imageFiles === null || uploadButtonRefObject.current?.files.length === 0) &&
         <div className='flex flex-col flex-grow-2 justify-center items-center h-4/12 w-max mt-5 px-5 border-2 border-dashed border-gray-800 bg-clip-padding box-border rounded-md top-0 z-30'>
           <span className='font-bold'>Drop your .jpg or .png files here!</span>
           <p className='text-sm'>Resize an unlimited amount of images with zero file size limits.</p>
-          <input type='file' id='upload-button' ref={uploadButtonRef} hidden />
           <label
             htmlFor='upload-button'
             className='box-border inline-block bg-indigo-600 hover:bg-indigo-500 py-3 px-4 mx-5 rounded-lg text-lg text-white font-bold mt-5'

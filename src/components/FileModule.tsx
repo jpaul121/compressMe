@@ -1,6 +1,7 @@
 import Button from './Button'
 import FileCard from './FileCard'
 import React from 'react'
+import uniqid from 'uniqid'
 
 function FileModule({ imageFiles }) {
   function renderFileCards() {
@@ -8,7 +9,7 @@ function FileModule({ imageFiles }) {
     Object.keys(imageFiles).map(index => {
       fileCards.push(
         <FileCard
-          key={imageFiles[index].objectURL}
+          key={uniqid()}
           thumbnailURL={imageFiles[index].objectURL}
           filename={imageFiles[index].name}
           originalSize={imageFiles[index].size}
