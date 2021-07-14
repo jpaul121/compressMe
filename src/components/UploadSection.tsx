@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react'
 import Button from './Button'
 import Compressor from 'compressorjs'
 import FileModule from './FileModule'
-import { useRefWithEventListener } from '../hooks/useRefWithEventListener'
+import { isEqual } from 'lodash'
+import usePrevious from '../hooks/usePrevious'
+import useRefWithEventListener from '../hooks/useRefWithEventListener'
 
 function UploadSection() {
   const [ imageFiles, setImageFiles ] = useState<ImageFiles | null>(null)
 
+  const prevImageFiles = usePrevious(imageFiles)
   const [ uploadButtonRefObject, uploadButtonRef ] = useRefWithEventListener(compressImage)
 
   function compressImage(e: HTMLInputEvent) {
@@ -31,7 +34,10 @@ function UploadSection() {
   
   useEffect(() => {
     // Set objectURLs for each image so they can be used for thumbnails
-    if (imageFiles) Object.keys(imageFiles).map(index => {
+    if (
+      imageFiles &&
+      !isEqual(prevImageFiles, imageFiles)
+    ) Object.keys(imageFiles).map(index => {
       const item = imageFiles[index]
       item.objectURL = URL.createObjectURL(item)
       setImageFiles({
@@ -39,12 +45,16 @@ function UploadSection() {
        [ item.name ]: item,
       })
     })
-
+    console.log('mounting', uploadButtonRefObject.current);
     return () => {
       // Revoke objectURLs on dismount to avoid memory leaks
-      if (imageFiles) Object.keys(imageFiles).map(index => {
+      if (
+        imageFiles &&
+        !isEqual(prevImageFiles, imageFiles)
+      ) Object.keys(imageFiles).map(index => {
         const item = imageFiles[index]
         URL.revokeObjectURL(item.objectURL)
+        console.log('mounting', uploadButtonRefObject.current);
       })
     }
   }, [ imageFiles ])
@@ -52,7 +62,7 @@ function UploadSection() {
   return (
     <div className='flex flex-col items-center h-7/12 w-6/12 bg-white rounded-md z-10'>
       {
-        (imageFiles === null || uploadButtonRefObject.current?.files.length < 1) &&
+        (imageFiles === null || uploadButtonRefObject.current?.files.length === 0) &&
         <div className='flex flex-col flex-grow-2 justify-center items-center h-4/12 w-max mt-5 px-5 border-2 border-dashed border-gray-800 bg-clip-padding box-border rounded-md top-0 z-30'>
           <span className='font-bold'>Drop your .jpg or .png files here!</span>
           <p className='text-sm'>Resize an unlimited amount of images with zero file size limits.</p>
@@ -66,7 +76,7 @@ function UploadSection() {
         </div>
       }
       {
-        (uploadButtonRefObject.current?.files.length > 1) &&
+        (uploadButtonRefObject.current?.files.length > 0) &&
         <FileModule imageFiles={imageFiles} />
       }
       <div className='flex w-max mb-5'>

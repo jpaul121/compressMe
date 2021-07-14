@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react'
 
-export function useRefWithEventListener(callback: (e: HTMLInputEvent) => void): [ React.MutableRefObject<HTMLInputElement>, (node: HTMLInputElement) => void ] {
+export default function useRefWithEventListener(callback: (e: HTMLInputEvent) => void): [ React.MutableRefObject<HTMLInputElement>, (node: HTMLInputElement) => void ] {
   const refObject = useRef<HTMLInputElement | null>(null)
   
   const setRef = useCallback((node: HTMLInputElement) => {

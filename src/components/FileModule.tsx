@@ -5,17 +5,18 @@ import React from 'react'
 function FileModule({ imageFiles }) {
   function renderFileCards() {
     let fileCards = []
-    for (const file of imageFiles) {
+    Object.keys(imageFiles).map(index => {
       fileCards.push(
         <FileCard
-          key={file.objectURL}
-          thumbnailURL={file.objectURL}
-          filename={file.name}
-          originalSize={file.size}
+          key={imageFiles[index].objectURL}
+          thumbnailURL={imageFiles[index].objectURL}
+          filename={imageFiles[index].name}
+          originalSize={imageFiles[index].size}
         />
       )
+    })
+    
     return fileCards;
-    }
   }
   
   return (
