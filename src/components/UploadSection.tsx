@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import 'regenerator-runtime/runtime'
+
+import React, { useEffect, useRef, useState } from 'react'
 
 import Button from './Button'
 import Compressor from 'compressorjs'
@@ -8,53 +10,48 @@ import usePrevious from '../hooks/usePrevious'
 import useRefWithEventListener from '../hooks/useRefWithEventListener'
 
 function UploadSection() {
-  const [ imageFiles, setImageFiles ] = useState<ImageFiles | null>(null)
+  const [ imageFiles, setImageFiles ] = useState<Map<string, ImageFile> | null>(null)
 
   const prevImageFiles = usePrevious(imageFiles)
-  const [ uploadButtonRefObject, uploadButtonRef ] = useRefWithEventListener(compressImage)
+  const [ uploadButtonRefObject, uploadButtonRef ] = useRefWithEventListener(processImage)
 
-  function compressImage(e: HTMLInputEvent) {
-    const file = e.target.files[0]
+  async function compressImage(file: File): Promise<ImageFile> {
+    return new Promise<ImageFile>((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.3,
+        success: result => {
+          const image = result as ImageFile
+          image.compressedSize = image.size
+          image.objectURL = URL.createObjectURL(image)
+          if (!('originalSize' in file)) image.originalSize = file.size
+          if (!('referenceName' in file)) image.referenceName = file.name
+          image.wasCompressed = true
+          resolve(image)
+        },
+        error: reject,
+      })
+    });
+  }
 
-    if (!file) return;
-
-    new Compressor(file, {
-      quality: 0.7,
-      success(result: ImageFile) {
-        setImageFiles(prevState => ({
-          ...prevState,
-          [ result.name ]: result,
-        }))
-      },
-      error(err) {
-        console.log(err)
-      },
+  async function processImage(e: HTMLInputEvent) {
+    const latestFile = e.target.files.item(e.target.files.length - 1)
+    const image = await compressImage(latestFile)
+    
+    setImageFiles(prevState => {
+      const nextState = new Map(prevState)
+      nextState.set(image.referenceName, image)
+      return nextState;
     })
   }
   
   useEffect(() => {
-    // Set objectURLs for each image so they can be used for thumbnails
-    if (
-      imageFiles &&
-      !isEqual(prevImageFiles, imageFiles)
-    ) Object.keys(imageFiles).map(index => {
-      const item = imageFiles[index]
-      item.objectURL = URL.createObjectURL(item)
-      setImageFiles({
-       ...imageFiles,
-       [ item.name ]: item,
-      })
-    })
-    
     return () => {
       // Revoke objectURLs on dismount to avoid memory leaks
-      if (
-        imageFiles &&
-        !isEqual(prevImageFiles, imageFiles)
-      ) Object.keys(imageFiles).map(index => {
-        const item = imageFiles[index]
-        URL.revokeObjectURL(item.objectURL)
-      })
+      if (imageFiles && !isEqual(prevImageFiles, imageFiles)) {
+        for (const [ _, image ] of imageFiles.entries()) {
+          URL.revokeObjectURL(image.objectURL)
+        }
+      }
     }
   }, [ imageFiles ])
   
@@ -68,7 +65,7 @@ function UploadSection() {
           <p className='text-sm'>Resize an unlimited amount of images with zero file size limits.</p>
           <label
             htmlFor='upload-button'
-            className='box-border inline-block bg-indigo-600 hover:bg-indigo-500 py-3 px-4 mx-5 rounded-lg text-lg text-white font-bold mt-5'
+            className='box-border inline-block bg-indigo-600 hover:bg-indigo-500 py-3 px-4 mx-5 rounded-lg text-lg text-white font-bold mt-5 cursor-pointer'
           >
             No file chosen
           </label>
@@ -79,9 +76,12 @@ function UploadSection() {
         <FileModule imageFiles={imageFiles} />
       }
       <div className='flex w-max mb-5'>
-        <Button 
-          text='Add files'
-        />
+        <label
+          htmlFor='upload-button'
+          className='box-border inline-block bg-indigo-600 hover:bg-indigo-500 py-3 px-4 mx-5 rounded-lg text-lg text-white font-bold mt-5 cursor-pointer'
+        >
+          Add files
+        </label>
         <Button 
           text='Clear all'
         />

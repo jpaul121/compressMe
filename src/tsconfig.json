@@ -2,8 +2,12 @@
   "compilerOptions": {
     "baseUrl": "./",
     "declaration": true,
+    "downlevelIteration": true,
+    "lib": ["ES2015", "DOM"],
     "jsx": "react",
+    "moduleResolution": "node",
     "esModuleInterop": true,
+    "target": "ES6",
     "typeRoots": ["./main.d.ts"]
   }
 }

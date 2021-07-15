@@ -1,10 +1,10 @@
 interface ImageFile extends Blob {
+  compressedSize: number;
   name: string;
   objectURL: string;
-}
-
-interface ImageFiles {
-  [ fileName: string ]: ImageFile;
+  originalSize: number;
+  referenceName: string;
+  wasCompressed?: boolean;
 }
 
 interface HTMLInputEvent extends Event {
