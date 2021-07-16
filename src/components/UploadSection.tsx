@@ -1,7 +1,10 @@
 import 'regenerator-runtime/runtime'
 
+import * as PNG from 'upng-js'
+
 import React, { useEffect, useRef, useState } from 'react'
 
+import { Buffer } from 'buffer'
 import Button from './Button'
 import Compressor from 'compressorjs'
 import FileModule from './FileModule'
@@ -23,8 +26,8 @@ function UploadSection() {
           const image = result as ImageFile
           image.compressedSize = image.size
           image.objectURL = URL.createObjectURL(image)
-          if (!('originalSize' in file)) image.originalSize = file.size
-          if (!('referenceName' in file)) image.referenceName = file.name
+          image.originalSize = file.size
+          image.referenceName = file.name
           image.wasCompressed = true
           resolve(image)
         },
@@ -33,9 +36,38 @@ function UploadSection() {
     });
   }
 
-  async function processImage(e: HTMLInputEvent) {
+  async function compressPNG(file: File, paletteSize=256): Promise<ImageFile> {
+    return new Promise(async resolve => {
+      // Convert File type to raw binary data for compression
+      let rawData = await new Promise(async resolve => {
+        const reader = new FileReader()
+        reader.onload = function() {
+          resolve(Buffer.from(this.result as ArrayBuffer))
+        }
+        reader.readAsArrayBuffer(file)
+      })
+      
+      const png = PNG.decode(rawData)
+      let compressedPNG = PNG.encode([ PNG.toRGBA8(png)[0] ], png.width, png.height, paletteSize)
+      
+      let image: any = Buffer.from(compressedPNG)
+      // @ts-ignore
+      image = new Blob([ new Uint8Array(rawData, rawData.byteOffset, rawData.byteLength / Uint8Array.BYTES_PER_ELEMENT) ])
+      image = image as ImageFile
+      
+      image.compressedSize = image.size
+      image.objectURL = URL.createObjectURL(image)
+      image.originalSize = file.size
+      image.referenceName = file.name
+      image.wasCompressed = true
+      
+      resolve(image)
+    });
+  }
+
+  async function processImage(e: HTMLInputEvent): Promise<void> {
     const latestFile = e.target.files.item(e.target.files.length - 1)
-    const image = await compressImage(latestFile)
+    const image = /.png$/i.test(latestFile.name) ? await compressPNG(latestFile) : await compressImage(latestFile)
     
     setImageFiles(prevState => {
       const nextState = new Map(prevState)
