@@ -2,20 +2,17 @@ import 'regenerator-runtime/runtime'
 
 import * as PNG from 'upng-js'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Buffer } from 'buffer'
 import Button from './Button'
 import Compressor from 'compressorjs'
 import FileModule from './FileModule'
-import { isEqual } from 'lodash'
-import usePrevious from '../hooks/usePrevious'
 import useRefWithEventListener from '../hooks/useRefWithEventListener'
 
-function UploadSection() {
+function UploadWidget() {
   const [ imageFiles, setImageFiles ] = useState<Map<string, ImageFile> | null>(null)
 
-  const prevImageFiles = usePrevious(imageFiles)
   const [ uploadButtonRefObject, uploadButtonRef ] = useRefWithEventListener(processImage)
 
   async function compressImage(file: File): Promise<ImageFile> {
@@ -25,10 +22,10 @@ function UploadSection() {
         success: result => {
           const image = result as ImageFile
           image.compressedSize = image.size
-          image.objectURL = URL.createObjectURL(image)
           image.originalSize = file.size
           image.referenceName = file.name
           image.wasCompressed = true
+          
           resolve(image)
         },
         error: reject,
@@ -56,7 +53,6 @@ function UploadSection() {
       image = image as ImageFile
       
       image.compressedSize = image.size
-      image.objectURL = URL.createObjectURL(image)
       image.originalSize = file.size
       image.referenceName = file.name
       image.wasCompressed = true
@@ -75,17 +71,6 @@ function UploadSection() {
       return nextState;
     })
   }
-  
-  useEffect(() => {
-    return () => {
-      // Revoke objectURLs on dismount to avoid memory leaks
-      if (imageFiles && !isEqual(prevImageFiles, imageFiles)) {
-        for (const [ _, image ] of imageFiles.entries()) {
-          URL.revokeObjectURL(image.objectURL)
-        }
-      }
-    }
-  }, [ imageFiles ])
   
   return (
     <div className='flex flex-col items-center h-7/12 w-full-send bg-white rounded-md z-10'>
@@ -125,4 +110,4 @@ function UploadSection() {
   );
 }
 
-export default UploadSection
+export default UploadWidget

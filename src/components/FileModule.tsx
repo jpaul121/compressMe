@@ -5,7 +5,7 @@ import uniqid from 'uniqid'
 function FileModule({ imageFiles }) {
   function renderFileCards() {
     let fileCards = []
-    for (const [ _, image ] of imageFiles.entries()) {
+    for (const image of imageFiles.values()) {
       fileCards.push(
         <FileCard
           key={uniqid()}

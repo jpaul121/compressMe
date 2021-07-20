@@ -4,19 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 
 function FileCard({ image }) {
-  const [ imageSource, setImageSource ] = useState(image.objectURL)
+  const [ imageSource, setImageSource ] = useState(URL.createObjectURL(image))
 
   function onError() {
     setImageSource(URL.createObjectURL(image))
   }
 
-  // useEffect(() => {
-  //   setImageSource(URL.createObjectURL(image))
-
-  //   return () => {
-  //     URL.revokeObjectURL(imageSource)
-  //   }
-  // })
+  useEffect(() => {
+    return () => {
+      URL.revokeObjectURL(imageSource)
+    }
+  })
   
   return (
     <li className='flex flex-row justify-start items-center w-full p-4 float-left box-border last:border-b-0'>
@@ -37,7 +35,7 @@ function FileCard({ image }) {
       </div>
       {
         // Make sure the file's been compressed before showing the download button
-        image.compressedSize &&
+        image.wasCompressed &&
         <div className='justify-self-end mx-end-row text-2xl cursor-pointer'>
           <FontAwesomeIcon icon={faArrowCircleDown} />
         </div>
