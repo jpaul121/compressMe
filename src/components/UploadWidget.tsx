@@ -21,6 +21,18 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
 
   const [ uploadButtonRefObject, uploadButtonRef ] = useRefWithEventListener(processImage)
 
+  function castAsImageFile(blob: Blob, originalFile: File): ImageFile {
+    const image = blob as ImageFile
+    
+    image.compressedSize = image.size
+    image.fileExtension = originalFile.name.substring(originalFile.name.lastIndexOf('.'))
+    image.name = originalFile.name
+    image.originalSize = originalFile.size
+    image.referenceName = originalFile.name.substring(0, originalFile.name.lastIndexOf('.'))
+    
+    return image;
+  }
+  
   function clearImages(e: HTMLInputEvent): void {
     e.preventDefault()
     setImageFiles(null)
@@ -33,15 +45,8 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
         maxHeight: maxHeight ? maxHeight : Infinity,
         maxWidth: maxWidth ? maxWidth : Infinity,
         success: result => {
-          const image = result as ImageFile
-          
-          image.compressedSize = image.size
-          image.fileExtension = file.name.substring(file.name.lastIndexOf('.'))
-          image.name = file.name
-          image.originalSize = file.size
-          image.referenceName = file.name.substring(0, file.name.lastIndexOf('.'))
+          const image = castAsImageFile(result, file)
           image.wasCompressed = true
-          
           resolve(image)
         },
         error: reject,
@@ -70,13 +75,7 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
       let image: any = Buffer.from(compressedPNG)
       // @ts-ignore
       image = new Blob([ new Uint8Array(rawData, rawData.byteOffset, rawData.byteLength / Uint8Array.BYTES_PER_ELEMENT) ])
-      image = image as ImageFile
-      
-      image.compressedSize = image.size
-      image.fileExtension = file.name.substring(file.name.lastIndexOf('.'))
-      image.name = file.name
-      image.originalSize = file.size
-      image.referenceName = file.name.substring(0, file.name.lastIndexOf('.'))
+      image = castAsImageFile(image, file)
       image.wasCompressed = true
       
       resolve(image)
