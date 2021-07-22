@@ -1,5 +1,6 @@
 interface ImageFile extends Blob {
   compressedSize: number;
+  fileExtension: string;
   name: string;
   originalSize: number;
   referenceName: string;

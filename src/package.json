@@ -53,6 +53,7 @@
     "autoprefixer": "^10.2.6",
     "buffer": "^6.0.3",
     "compressorjs": "^1.0.7",
+    "js-file-download": "^0.4.12",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.1.0",
     "postcss-cli": "^8.3.1",

@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons'
+import fileDownload from 'js-file-download'
 
 function FileCard({ image }) {
   const [ imageSource, setImageSource ] = useState(URL.createObjectURL(image))
+  
+  const downloadableImage = useMemo(() => image as Blob, [ image ])
 
   function onError() {
     setImageSource(URL.createObjectURL(image))
@@ -27,7 +30,7 @@ function FileCard({ image }) {
       </div>
       <div className=''>
         <span className='max-w-2xs block whitespace-nowrap overflow-ellipsis text-gray-800 font-semibold'>
-          {image.referenceName}
+          {image.name}
         </span>
         <span className='max-w-2xs my-1 block whitespace-nowrap overflow-ellipsis text-gray-800 font-semibold'>
           {(image.originalSize / 1000).toFixed(2)} KB {image.compressedSize ? '→ ' + (image.compressedSize / 1000).toFixed(2) + ' KB': null}
@@ -37,7 +40,10 @@ function FileCard({ image }) {
         // Make sure the file's been compressed before showing the download button
         image.wasCompressed &&
         <div className='justify-self-end mx-end-row text-2xl cursor-pointer'>
-          <FontAwesomeIcon icon={faArrowCircleDown} />
+          {/* @ts-ignore */}
+          <a onClick={() => fileDownload(image as Blob, `${image.referenceName}_compressed${image.fileExtension}`)}>
+            <FontAwesomeIcon icon={faArrowCircleDown} />
+          </a>
         </div>
       }
     </li>

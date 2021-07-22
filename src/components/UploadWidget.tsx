@@ -34,9 +34,12 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
         maxWidth: maxWidth ? maxWidth : Infinity,
         success: result => {
           const image = result as ImageFile
+          
           image.compressedSize = image.size
+          image.fileExtension = file.name.substring(file.name.lastIndexOf('.'))
+          image.name = file.name
           image.originalSize = file.size
-          image.referenceName = file.name
+          image.referenceName = file.name.substring(0, file.name.lastIndexOf('.'))
           image.wasCompressed = true
           
           resolve(image)
@@ -70,8 +73,10 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
       image = image as ImageFile
       
       image.compressedSize = image.size
+      image.fileExtension = file.name.substring(file.name.lastIndexOf('.'))
+      image.name = file.name
       image.originalSize = file.size
-      image.referenceName = file.name
+      image.referenceName = file.name.substring(0, file.name.lastIndexOf('.'))
       image.wasCompressed = true
       
       resolve(image)
