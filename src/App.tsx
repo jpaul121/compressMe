@@ -12,7 +12,7 @@ function App() {
   const [ maxWidth, setMaxWidth ] = useState<number | null>(null)
   const [ maxHeight, setMaxHeight ] = useState<number | null>(null)
 
-  function toggleSettingsModal(e: HTMLInputEvent) {
+  function toggleSettingsModal(e: HTMLInputEvent): void {
     e.preventDefault()
     setToggleSettingsModal(!showSettingsModal)
   }

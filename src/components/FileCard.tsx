@@ -1,14 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons'
 import fileDownload from 'js-file-download'
 
+const BYTES_TO_KILOBYTES = 1000
+const MIN_SIZE_DIFFERENCE_BYTES = 500
+const N_DECIMAL_POINTS = 2
+
 function FileCard({ image }) {
   const [ imageSource, setImageSource ] = useState(URL.createObjectURL(image))
-  
-  const downloadableImage = useMemo(() => image as Blob, [ image ])
 
+  function checkSizeDifference(originalSize: number, finalSize: number, minimumDifference: number) {
+    return ((originalSize - finalSize) >= minimumDifference);
+  }
+  
   function onError() {
     setImageSource(URL.createObjectURL(image))
   }
@@ -20,7 +26,7 @@ function FileCard({ image }) {
   })
   
   return (
-    <li className='flex flex-row justify-start items-center w-full p-4 float-left box-border last:border-b-0'>
+    <li className='flex flex-row justify-start items-center w-full p-4 float-left box-border border-b-2 last:border-b-0'>
       <div className='w-16 h-10 mx-5 border border-white overflow-hidden'>
         <img
           className='w-full h-full align-bottom object-contain'
@@ -28,12 +34,16 @@ function FileCard({ image }) {
           onError={onError}
         />
       </div>
-      <div className=''>
+      <div>
         <span className='max-w-2xs block whitespace-nowrap overflow-ellipsis text-gray-800 font-semibold'>
           {image.name}
         </span>
         <span className='max-w-2xs my-1 block whitespace-nowrap overflow-ellipsis text-gray-800 font-semibold'>
-          {(image.originalSize / 1000).toFixed(2)} KB {image.compressedSize ? '→ ' + (image.compressedSize / 1000).toFixed(2) + ' KB': null}
+          {
+            checkSizeDifference(image.originalSize, image.compressedSize, MIN_SIZE_DIFFERENCE_BYTES)
+            ? `${(image.originalSize / BYTES_TO_KILOBYTES).toFixed(N_DECIMAL_POINTS)} KB → ${(image.compressedSize / BYTES_TO_KILOBYTES).toFixed(N_DECIMAL_POINTS)} KB`
+            : 'File was already compressed!'
+          }
         </span>
       </div>
       {

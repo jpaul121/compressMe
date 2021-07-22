@@ -8,10 +8,10 @@ function HeroSection() {
         <br/>
         right on your browser.
       </h3>
-      <p className='text-white font-bold text-lg mt-5'>
-        Compress images privately and at light speed with this serverless, browser-based image compressor. Because it runs on your browser, 
+      <p className='text-white font-bold text-base mt-5 bg-gray-900 px-4 py-2 border-box rounded-lg'>
+        Compress images privately and at lightspeed with this serverless, browser-based image compressor. Because it runs on your browser, 
         there's no need to worry about giving your pictures to shady websites or having your private data infringed upon. Because there's no need
-        to upload pictures to servers, this runs 10x faster than websites like tinypng and compressor.io. 
+        to upload pictures to servers, this runs ten times faster than comparable websites. 
       </p>
     </div>
   );

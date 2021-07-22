@@ -20,7 +20,6 @@ function SettingsModal({ imageQuality, maxHeight, maxWidth, setImageQuality, set
   return (
     <div className='modal z-50 fixed w-full h-full top-0 left-0 flex items-center justify-center'>
       <div className='modal-overlay absolute w-full h-full bg-gray-900 opacity-50'></div>
-      
       <div className='modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto'>
         <div className='modal-content py-4 text-left px-6'>
           <div className='flex w-full'>
@@ -28,7 +27,7 @@ function SettingsModal({ imageQuality, maxHeight, maxWidth, setImageQuality, set
             <p className='self-end mx-end-row font-bold'>{imageQuality}%</p>
           </div>
           <input
-            className='rounded-lg overflow-hidden appearance-none bg-gray-400 h-3 w-full my-4'
+            className='rounded-lg overflow-hidden appearance-none bg-gray-900 h-3 w-full my-4'
             type='range'
             min='1'
             max='100'
@@ -36,7 +35,6 @@ function SettingsModal({ imageQuality, maxHeight, maxWidth, setImageQuality, set
             step='1'
             value={imageQuality}
           />
-
           <p className='my-4 font-bold'>Max Width (px)</p>
           <div className='mb-3 pt-0'>
             <input
@@ -48,7 +46,6 @@ function SettingsModal({ imageQuality, maxHeight, maxWidth, setImageQuality, set
               value={maxWidth}
             />
           </div>
-          
           <p className='my-4 font-bold'>Max Height (px)</p>
           <div className='mb-3 pt-0'>
             <input
@@ -60,7 +57,6 @@ function SettingsModal({ imageQuality, maxHeight, maxWidth, setImageQuality, set
               value={maxHeight}
             />
           </div>
-
           <div className='flex justify-end'>
             <Button
               onClick={toggleSettingsModal}
