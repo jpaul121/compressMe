@@ -50,8 +50,7 @@ module.exports = {
     },
     devServer: {
         contentBase: path.join(__dirname, '../dist'),
-        compress: true,
-        port: 8000
+        compress: true
     },
     mode: 'development',
     plugins: [

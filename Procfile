@@ -1,0 +1,1 @@
+worker: webpack serve --config webpack.config.js
