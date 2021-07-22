@@ -56,12 +56,12 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
 
   async function compressPNG(file: File, imageQuality: number, maxHeight: number | null, maxWidth: number | null): Promise<ImageFile> {
     // Map the percentage value of image quality chosen by the user to a palette size ranging
-    // from 10 to 255, which UPNG.js expects in order to determine the quality of the compressed image. 
+    // from 10 to 255, which UPNG.js expects in order to determine the quality of the compressed image
     const paletteSize = PALETTE_SIZE_FLOOR + Math.floor(QUALITY_MAP_SLOPE * (imageQuality - IMAGE_QUALITY_PCT_FLOOR))
     
     return new Promise(async resolve => {
       // Convert File type to raw binary data for compression
-      let rawData = await new Promise(async resolve => {
+      const rawData = await new Promise(async resolve => {
         const reader = new FileReader()
         reader.onload = function() {
           resolve(Buffer.from(this.result as ArrayBuffer))
@@ -70,7 +70,7 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
       })
       
       const png = PNG.decode(rawData)
-      let compressedPNG = PNG.encode([ PNG.toRGBA8(png)[0] ], maxWidth ? maxWidth : png.width, maxHeight ? maxHeight : png.height, paletteSize)
+      const compressedPNG = PNG.encode([ PNG.toRGBA8(png)[0] ], maxWidth ? maxWidth : png.width, maxHeight ? maxHeight : png.height, paletteSize)
       
       let image: any = Buffer.from(compressedPNG)
       // @ts-ignore
@@ -91,7 +91,7 @@ function UploadWidget({ imageQuality, maxHeight, maxWidth, toggleSettingsModal }
       
       setImageFiles(prevState => {
         const nextState = new Map(prevState)
-        nextState.set(image.referenceName, image)
+        nextState.set(image.name, image)
         return nextState;
       })
     }

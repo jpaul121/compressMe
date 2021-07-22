@@ -4,7 +4,7 @@ import Header from './components/Header'
 import HeroSection from './components/HeroSection'
 import SettingsModal from './components/SettingsModal'
 import UploadWidget from './components/UploadWidget'
-import background from './assets/background_img.jpg'
+import background_img from './assets/background_img.jpg'
 
 function App() {
   const [ showSettingsModal, setToggleSettingsModal ] = useState<boolean>(false)
@@ -19,7 +19,7 @@ function App() {
   
   return (
       <div className='bg-indigo-900 relative overflow-hidden h-screen'>
-        <img src={background} className='absolute h-full w-full object-cover'/>
+        <img src={background_img} className='absolute h-full w-full object-cover'/>
         <div className='inset-0 bg-black opacity-25 absolute'>
         </div>
         <Header />
