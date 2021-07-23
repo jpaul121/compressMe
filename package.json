@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://compressit-722.herokuapp.com/",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "types": "main.d.ts",
   "babel": {
     "presets": [
@@ -18,15 +18,18 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack build",
+    "build": "webpack build --target node",
     "deploy": "gh-pages -d build",
-    "start": "webpack serve --config webpack.config.js --progress"
+    "start-webpack": "webpack serve --config webpack.config.js --progress",
+    "start": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "@types/jest": "^26.0.24",
+    "@types/jsdom": "^16.2.13",
     "@types/lodash": "^4.14.171",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.14",
@@ -49,9 +52,11 @@
     "buffer": "^6.0.3",
     "compressorjs": "^1.0.7",
     "css-loader": "^6.2.0",
+    "express": "^4.17.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "js-file-download": "^0.4.12",
+    "jsdom": "^16.6.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.1.0",
     "postcss-cli": "^8.3.1",
