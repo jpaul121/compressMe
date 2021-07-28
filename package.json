@@ -17,12 +17,10 @@
     ]
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:node": "webpack build --target node",
     "build": "webpack build --config webpack.config.js --progress",
     "deploy": "gh-pages -d build",
-    "start-webpack": "webpack serve --config webpack.config.js --progress",
-    "start": "node ./server/index.js"
+    "start": "node ./server/index.js",
+    "start-webpack": "webpack serve --config webpack.config.js --progress"
   },
   "keywords": [],
   "author": "",
@@ -65,6 +63,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "regenerator-runtime": "^0.13.7",
+    "serve-favicon": "^2.5.0",
     "style-loader": "^3.2.1",
     "tailwindcss": "^2.2.4",
     "typescript": "^4.3.5",

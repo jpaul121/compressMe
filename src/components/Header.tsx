@@ -9,8 +9,8 @@ function Header() {
       <nav className='container mx-auto px-6 md:px-12 py-4'>
           <div className='md:flex justify-between items-center'>
             <div className='flex justify-between items-center'>
-              <span className='font-bold uppercase text-white'>
-                compress.it
+              <span className='font-bold text-white'>
+                compressMe
               </span>
             </div>
             <div className='hidden md:flex items-center'>
