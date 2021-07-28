@@ -9,6 +9,7 @@ module.exports = {
         filename: 'index.js',
         publicPath: ''
     },
+    devtool: 'source-map',
     resolve: {
         extensions: [ '.js', '.ts', '.tsx' ]
     },

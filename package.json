@@ -18,10 +18,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack build --target node",
+    "build:node": "webpack build --target node",
+    "build": "webpack build --config webpack.config.js --progress",
     "deploy": "gh-pages -d build",
     "start-webpack": "webpack serve --config webpack.config.js --progress",
-    "start": "node ./dist/index.js"
+    "start": "node ./server/index.js"
   },
   "keywords": [],
   "author": "",
