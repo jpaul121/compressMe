@@ -5,8 +5,10 @@
     "downlevelIteration": true,
     "lib": ["ES2015", "DOM"],
     "jsx": "react",
-    "moduleResolution": "node",
+    "module":"CommonJS",
     "esModuleInterop": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
     "target": "ES6",
     "typeRoots": ["./src/main.d.ts"],
     "types": ["node"]

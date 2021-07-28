@@ -11,4 +11,9 @@ interface HTMLInputEvent extends Event {
   target: HTMLInputElement & EventTarget;
 }
 
+declare module 'path-browserify' {
+  import path from 'path'
+  export default path
+}
+
 declare module '*.jpg'

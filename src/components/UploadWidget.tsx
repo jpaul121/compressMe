@@ -1,14 +1,16 @@
 import 'regenerator-runtime/runtime'
 
+import * as Buffer from 'Buffer'
 import * as PNG from 'upng-js'
 
 import React, { useState } from 'react'
 
-import { Buffer } from 'buffer'
 import Button from './Button'
 import Compressor from 'compressorjs'
 import FileModule from './FileModule'
 import useRefWithEventListener from '../hooks/useRefWithEventListener'
+
+// import { Buffer } from 'buffer'
 
 const IMAGE_QUALITY_PCT_CEILING = 100
 const IMAGE_QUALITY_PCT_FLOOR = 0

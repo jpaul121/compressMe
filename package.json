@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://compressit-722.herokuapp.com/",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/main.bundle.js",
   "types": "main.d.ts",
   "babel": {
     "presets": [
@@ -18,10 +18,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack build --target node",
+    "build": "webpack build --target node --config webpack.config.js",
     "deploy": "gh-pages -d build",
     "start-webpack": "webpack serve --config webpack.config.js --progress",
-    "start": "node ./dist/index.js"
+    "start": "node ./server/index.js"
   },
   "keywords": [],
   "author": "",
@@ -33,7 +33,9 @@
     "@types/lodash": "^4.14.171",
     "@types/node": "^16.3.3",
     "@types/react": "^17.0.14",
-    "@types/react-dom": "^17.0.9"
+    "@types/react-dom": "^17.0.9",
+    "node-loader": "^2.0.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.14.8",
@@ -50,6 +52,8 @@
     "autoprefixer": "^10.2.6",
     "babel-loader": "^8.2.2",
     "buffer": "^6.0.3",
+    "Buffer": "^0.0.0",
+    "canvas": "^2.8.0",
     "compressorjs": "^1.0.7",
     "css-loader": "^6.2.0",
     "express": "^4.17.1",
@@ -59,6 +63,7 @@
     "jsdom": "^16.6.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.1.0",
+    "path-browserify": "^1.0.1",
     "postcss-cli": "^8.3.1",
     "postcss-loader": "^6.1.1",
     "react": "^17.0.2",

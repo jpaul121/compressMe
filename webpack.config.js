@@ -1,65 +1,98 @@
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// import HtmlWebpackPlugin from 'html-webpack-plugin'
+// import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+// import nodeExternals from 'webpack-node-externals'
+// import path from 'path'
+// import process from 'process'
+
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const path = require('path')
+const process = require('process')
 
 module.exports = {
     entry: './src/index.tsx',
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'index.js',
-        publicPath: ''
+        path: path.join(process.cwd(), 'dist'),
+        filename: 'main.bundle.js',
+        publicPath: '',
     },
+    target: 'web',
+    devtool: 'source-map',
     resolve: {
-        extensions: [ '.js', '.ts', '.tsx' ]
+        extensions: [ '.js', '.ts', '.tsx' ],
+    },
+    node: {
+        __dirname: false,
+    },
+    // externals: [
+    //     nodeExternals({
+    //     importType: 'umd',
+    //     modulesFromFile: {
+    //         filename: './package.json',
+    //         includeInBundle: [
+    //             'dependencies',
+    //         ],
+    //     },
+    // }) ],
+    externals: {
+        // bufferutil: 'bufferutil',
+        buffer: 'root Buffer',
+        path: 'path',
+        'utf-8-validate': 'utf-8-validate',
     },
     module: {
         rules: [
-            { 
+            {
                 test: /\.(js|ts|tsx)$/,
-                use: 'babel-loader'
+                use: 'babel-loader',
+            },
+            {
+                test: /\.node$/,
+                use: 'node-loader',
             },
             {
                 test: /\.(jpe?g)$/i,
                 use: [
                     {
-                        loader: 'file-loader'
+                        loader: 'file-loader',
                     }
                 ]
             },
             { 
                 test: /\.css$/,
-                include: path.resolve(__dirname),
+                include: path.resolve(process.cwd()),
                 exclude: /node_modules/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            esModule: false
+                            esModule: false,
+                            publicPath: '',
                         }
                     },
                     {
                         loader: 'css-loader',
                         options: {
-                            importLoaders: 1
+                            importLoaders: 1,
                         }
                     },
-                    'postcss-loader'
+                    'postcss-loader',
                 ]
             }
         ]
     },
     devServer: {
-        contentBase: path.join(__dirname, '../dist'),
-        compress: true
+        contentBase: path.join(process.cwd(), './dist'),
+        compress: true,
     },
     mode: 'development',
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.html'
+            template: './src/index.html',
         }),
         new MiniCssExtractPlugin({
             filename: 'main.bundle.css',
-            chunkFilename: './src/index.css'
+            chunkFilename: './src/index.css',
         })
-    ]
+    ],
 }
